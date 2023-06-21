@@ -1,6 +1,5 @@
 #include "effect.h"
 #include "expect.h"
-#include "len.h"
 #include "unused.h"
 
 struct Registers {
@@ -68,11 +67,11 @@ static void test_premul(void) {
     };
     run(program,1);
 
-    for (int i = 0; i < len(reg.r); i++) {
-        expect((float)reg.r[i] == 0.375f);
-        expect((float)reg.g[i] == 0.250f);
-        expect((float)reg.b[i] == 0.125f);
-        expect((float)reg.a[i] == 0.500f);
+    for (int i = 0; i < (int)(sizeof(Half)/sizeof(half)); i++) {
+        expect((float) i[(half const*)&reg.r] == 0.375f);
+        expect((float) i[(half const*)&reg.g] == 0.250f);
+        expect((float) i[(half const*)&reg.b] == 0.125f);
+        expect((float) i[(half const*)&reg.a] == 0.500f);
     }
 }
 

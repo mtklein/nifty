@@ -1,5 +1,11 @@
 #pragma once
 
+#if defined(__GNUC__) || defined(__clang__)
+    #define vector_size(sz) __attribute__((__vector_size__(sz)))
+#else
+    #define vector_size(sz)
+#endif
+
 #if defined(__ARM_FEATURE_FP16_VECTOR_ARITHMETIC)
     typedef _Float16 half;
 #else
@@ -7,12 +13,14 @@
 #endif
 
 #if defined(__AVX__)
-    typedef half __attribute__((vector_size(32))) Half;
+    typedef half vector_size(32) Half;
 #else
-    typedef half __attribute__((vector_size(16))) Half;
+    typedef half vector_size(16) Half;
 #endif
 
-typedef float __attribute__((vector_size(sizeof(Half)/sizeof(half) * sizeof(float)))) Float;
+typedef float vector_size(sizeof(Half)/sizeof(half) * sizeof(float)) Float;
+
+#undef vector_size
 
 extern struct Effect {
     void (*fn)(struct Effect const*,int, Half,Half,Half,Half, Half,Half,Half,Half);
