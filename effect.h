@@ -12,7 +12,7 @@
     typedef half __attribute__((vector_size(16))) Half;
 #endif
 
-typedef float __attribute__((vector_size((sizeof(Half)/sizeof(half)) * sizeof(float)))) Float;
+typedef float __attribute__((vector_size(sizeof(Half)/sizeof(half) * sizeof(float)))) Float;
 
 extern struct Effect {
     void (*fn)(struct Effect const*,int, Half,Half,Half,Half, Half,Half,Half,Half);
@@ -21,7 +21,7 @@ extern struct Effect {
 
 void run(struct Effect const program[], int n);
 
-#define define_effect_fn(name,...) \
+#define define_effect_fn(name, ...)                                                          \
     void name(struct Effect const*, int, Half,Half,Half,Half, Half,Half,Half,Half);          \
     static void name##_(Half*,Half*,Half*,Half*, Float*,Float*, int, __VA_ARGS__);           \
     void name(struct Effect const *ip, int end, Half r , Half g , Half b , Half a            \
