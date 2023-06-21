@@ -1,8 +1,5 @@
 #include "effect.h"
 #include "expect.h"
-
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-
 #define len(x) (int)(sizeof(x) / sizeof((x)[0]))
 
 struct Registers {
@@ -10,6 +7,7 @@ struct Registers {
     Float    x,y;
 };
 static define_effect_fn(dump, struct Registers *reg) {
+    (void)end;
     reg->r = *r;
     reg->g = *g;
     reg->b = *b;
@@ -22,6 +20,9 @@ struct Color {
     half r,g,b,a;
 };
 static define_effect_fn(uniform, struct Color const *c) {
+    (void)x;
+    (void)y;
+    (void)end;
     *r = c->r - (Half){0};
     *g = c->g - (Half){0};
     *b = c->b - (Half){0};
@@ -29,6 +30,10 @@ static define_effect_fn(uniform, struct Color const *c) {
 }
 
 static define_effect_fn(premul, void *unused) {
+    (void)x;
+    (void)y;
+    (void)end;
+    (void)unused;
     *r *= *a;
     *g *= *a;
     *b *= *a;
@@ -39,6 +44,11 @@ struct Affine {
           ky,sy,ty;
 };
 static define_effect_fn(affine, struct Affine const *m) {
+    (void)r;
+    (void)g;
+    (void)b;
+    (void)a;
+    (void)end;
     Float X = *x * m->sx + (*y * m->kx + m->tx),
           Y = *x * m->ky + (*y * m->sy + m->ty);
     *x = X;
@@ -50,6 +60,13 @@ struct HalfTernary {
     Half const *x,*y,*z;
 };
 static define_effect_fn(half_mad, struct HalfTernary const *arg) {
+    (void)r;
+    (void)g;
+    (void)b;
+    (void)a;
+    (void)x;
+    (void)y;
+    (void)end;
     *arg->dst = *arg->x * *arg->y + *arg->z;
 }
 
