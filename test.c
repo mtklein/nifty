@@ -1,14 +1,9 @@
 #include "effect.h"
-#include <stdio.h>
-
-#define len(x) (int)(sizeof(x) / sizeof((x)[0]))
-
-#define expect(x) \
-    if (!(x)) fprintf(stderr, "%s:%d expect(%s)\n", __FILE__, __LINE__, #x), __builtin_trap()
-
-#define splat(T,v) (((T){0} + 1) * v)
+#include "expect.h"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+
+#define len(x) (int)(sizeof(x) / sizeof((x)[0]))
 
 struct Registers {
     Half r,g,b,a;
@@ -27,10 +22,10 @@ struct Color {
     half r,g,b,a;
 };
 static define_effect_fn(uniform, struct Color const *c) {
-    *r = splat(Half, c->r);
-    *g = splat(Half, c->g);
-    *b = splat(Half, c->b);
-    *a = splat(Half, c->a);
+    *r = c->r - (Half){0};
+    *g = c->g - (Half){0};
+    *b = c->b - (Half){0};
+    *a = c->a - (Half){0};
 }
 
 static define_effect_fn(premul, void *unused) {
