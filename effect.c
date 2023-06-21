@@ -9,7 +9,7 @@ static void done_(struct Effect const *ip, int end, struct Opaque c, struct Opaq
 struct Effect const done = {done_, (void*)0};
 
 void run(struct Effect const program[], int n) {
-    int const K = sizeof(F32) / sizeof(float);
+    int const K = sizeof(Float) / sizeof(float);
     struct Opaque const zero = {0};
     for (int end = 0; n;) {
         end += n < K ? n : K;

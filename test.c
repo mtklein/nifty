@@ -8,9 +8,11 @@
 
 #define splat(T,v) (((T){0} + 1) * v)
 
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 struct Registers {
-    F16 r,g,b,a;
-    F32     x,y;
+    Half r,g,b,a;
+    Float    x,y;
 };
 static define_effect_fn(dump, struct Registers *reg) {
     reg->r = *r;
@@ -22,13 +24,13 @@ static define_effect_fn(dump, struct Registers *reg) {
 }
 
 struct Color {
-    _Float16 r,g,b,a;
+    half r,g,b,a;
 };
 static define_effect_fn(uniform, struct Color const *c) {
-    *r = splat(F16, c->r);
-    *g = splat(F16, c->g);
-    *b = splat(F16, c->b);
-    *a = splat(F16, c->a);
+    *r = splat(Half, c->r);
+    *g = splat(Half, c->g);
+    *b = splat(Half, c->b);
+    *a = splat(Half, c->a);
 }
 
 static define_effect_fn(premul, void *unused) {
@@ -42,17 +44,17 @@ struct Affine {
           ky,sy,ty;
 };
 static define_effect_fn(affine, struct Affine const *m) {
-    F32 X = *x * m->sx + (*y * m->kx + m->tx),
-        Y = *x * m->ky + (*y * m->sy + m->ty);
+    Float X = *x * m->sx + (*y * m->kx + m->tx),
+          Y = *x * m->ky + (*y * m->sy + m->ty);
     *x = X;
     *y = Y;
 }
 
-struct F16Ternary {
-    F16       *dst;
-    F16 const *x,*y,*z;
+struct HalfTernary {
+    Half       *dst;
+    Half const *x,*y,*z;
 };
-static define_effect_fn(f16mad, struct F16Ternary const *arg) {
+static define_effect_fn(f16mad, struct HalfTernary const *arg) {
     *arg->dst = *arg->x * *arg->y + *arg->z;
 }
 
