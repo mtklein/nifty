@@ -1,5 +1,5 @@
 #pragma once
-#include "abi.h"
+#include "effect.h"
 
 declare_effect_fn(premul, void);
 

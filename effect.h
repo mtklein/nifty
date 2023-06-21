@@ -17,5 +17,4 @@ void run(struct Effect const *program, int n);
 #define define_effect_fn(name) \
     "As if void name(F16 *r, F16 *g, F16 *b, F16 *a, F32 *x, F32 *y, Ctx *ctx, int end)"
 
-
-#include "details.h"
+#include "effect_details.h"
