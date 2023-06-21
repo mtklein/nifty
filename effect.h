@@ -6,7 +6,12 @@
     typedef  float   half;
 #endif
 
-typedef half  __attribute__((vector_size(16)))                                          Half;
+#if defined(__AVX__)
+    typedef half __attribute__((vector_size(32))) Half;
+#else
+    typedef half __attribute__((vector_size(16))) Half;
+#endif
+
 typedef float __attribute__((vector_size((sizeof(Half)/sizeof(half)) * sizeof(float)))) Float;
 
 extern struct Effect {

@@ -54,7 +54,7 @@ struct HalfTernary {
     Half       *dst;
     Half const *x,*y,*z;
 };
-static define_effect_fn(f16mad, struct HalfTernary const *arg) {
+static define_effect_fn(half_mad, struct HalfTernary const *arg) {
     *arg->dst = *arg->x * *arg->y + *arg->z;
 }
 
@@ -81,6 +81,6 @@ static void test_premul(void) {
 int main(void) {
     test_premul();
     (void)affine;
-    (void)f16mad;
+    (void)half_mad;
     return 0;
 }
