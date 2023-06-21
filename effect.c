@@ -1,17 +1,9 @@
 #include "effect.h"
+#include "unused.h"
 
 static void done_(struct Effect const *ip, int end, Half r , Half g , Half b , Half a
                                                   , Half xl, Half xh, Half yl, Half yh) {
-    (void)ip;
-    (void)end;
-    (void)r;
-    (void)g;
-    (void)b;
-    (void)a;
-    (void)xl;
-    (void)xh;
-    (void)yl;
-    (void)yh;
+    unused(ip,end, r,g,b,a, xl,xh, yl,yh);
 }
 struct Effect const done = {done_, (void*)0};
 
