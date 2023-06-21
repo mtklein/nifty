@@ -1,4 +1,5 @@
 #include "effect.h"
+#include "len.h"
 #include "unused.h"
 
 static void done_(struct Effect const *ip, int end, Half r , Half g , Half b , Half a
@@ -8,8 +9,8 @@ static void done_(struct Effect const *ip, int end, Half r , Half g , Half b , H
 struct Effect const done = {done_, (void*)0};
 
 void run(struct Effect const program[], int n) {
-    int const K = sizeof(Float) / sizeof(float);
     Half const z = {0};
+    int const K = len(z);
     for (int end = 0; n;) {
         end += n < K ? n : K;
         n   -= n < K ? n : K;

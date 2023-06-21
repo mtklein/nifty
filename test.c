@@ -1,7 +1,7 @@
 #include "effect.h"
 #include "expect.h"
+#include "len.h"
 #include "unused.h"
-#define len(x) (int)(sizeof(x) / sizeof((x)[0]))
 
 struct Registers {
     Half r,g,b,a;
