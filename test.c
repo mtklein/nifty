@@ -3,8 +3,8 @@
 #include "unused.h"
 
 #include "color.h"
+#include "coords.h"
 #include "custom.h"
-#include "matrix.h"
 
 #define K (int)(sizeof(Half) / sizeof(half))
 
@@ -40,7 +40,7 @@ static void test_premul(void) {
     };
     run(program,1);
 
-    for (int i = 0; i < (int)(sizeof(Half)/sizeof(half)); i++) {
+    for (int i = 0; i < K; i++) {
         expect((float)reg.R[i] == 0.375f);
         expect((float)reg.G[i] == 0.250f);
         expect((float)reg.B[i] == 0.125f);
@@ -48,9 +48,31 @@ static void test_premul(void) {
     }
 }
 
+static void test_scanline(void) {
+    struct Scanline const xy = {4,7};
+    union Registers reg;
+
+    struct Effect program[] = {
+        scanline(&xy),
+        {dump, .vptr=&reg},
+        done,
+    };
+
+    run(program,K);
+    for (int i = 0; i < K; i++) {
+        expect((float)reg.X[i] - (float)i == 4.5f);
+        expect((float)reg.Y[i]            == 7.5f);
+    }
+
+    run(program,2*K);
+    for (int i = 0; i < K; i++) {
+        expect((float)reg.X[i] - (float)(i+K) == 4.5f);
+        expect((float)reg.Y[i]                == 7.5f);
+    }
+}
+
 int main(void) {
     test_premul();
-    (void)affine;
-    (void)half_mad;
+    test_scanline();
     return 0;
 }
