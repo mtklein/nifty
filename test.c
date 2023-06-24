@@ -37,24 +37,45 @@ static define_effect_fn(dump, union Registers *reg) {
     reg->y = *y;
 }
 
-static void test_premul(void) {
+static void test_uniform_color(void) {
     struct Color const c = {0.75f, 0.5f, 0.25f, 0.5f};
     union Registers reg;
 
     struct Effect program[] = {
         uniform_color(&c),
+        {dump, .vptr=&reg},
+        done,
+    };
+
+    run(program,K);
+    for (int i = 0; i < K; i++) {
+        expect((float)reg.R[i] == 0.75f);
+        expect((float)reg.G[i] == 0.50f);
+        expect((float)reg.B[i] == 0.25f);
+        expect((float)reg.A[i] == 0.50f);
+    }
+}
+
+static void test_premul(void) {
+    union Registers reg = {
+        .R = {0.75f},
+        .G = {0.50f},
+        .B = {0.25f},
+        .A = {0.50f},
+    };
+
+    struct Effect program[] = {
+        {load, .cptr=&reg},
         premul,
         {dump, .vptr=&reg},
         done,
     };
-    run(program,1);
 
-    for (int i = 0; i < K; i++) {
-        expect((float)reg.R[i] == 0.375f);
-        expect((float)reg.G[i] == 0.250f);
-        expect((float)reg.B[i] == 0.125f);
-        expect((float)reg.A[i] == 0.500f);
-    }
+    run(program,1);
+    expect((float)reg.R[0] == 0.375f);
+    expect((float)reg.G[0] == 0.250f);
+    expect((float)reg.B[0] == 0.125f);
+    expect((float)reg.A[0] == 0.500f);
 }
 
 static void test_scanline(void) {
@@ -103,6 +124,7 @@ static void test_affine(void) {
 }
 
 int main(void) {
+    test_uniform_color();
     test_premul();
     test_scanline();
     test_affine();
