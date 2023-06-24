@@ -24,7 +24,10 @@ typedef float vector_size(sizeof(Half)/sizeof(half) * sizeof(float)) Float;
 
 extern struct Effect {
     void (*fn)(struct Effect const*,int, Half,Half,Half,Half, Half,Half,Half,Half);
-    void  *ctx;
+    union {
+        void       *vptr;
+        void const *cptr;
+    };
 } const done;
 
 void run(struct Effect const program[], int n);
@@ -35,7 +38,7 @@ void run(struct Effect const program[], int n);
     void name(struct Effect const *ip, int end, Half r , Half g , Half b , Half a            \
                                               , Half xl, Half xh, Half yl, Half yh) {        \
         union { Half h[2]; Float f; } x = {{xl,xh}}, y = {{yl,yh}};                          \
-        name##_(&r,&g,&b,&a, &x.f,&y.f, end, ip->ctx);                                       \
+        name##_(&r,&g,&b,&a, &x.f,&y.f, end, ip->vptr);                                      \
         ip[1].fn(ip+1,end, r,g,b,a, x.h[0],x.h[1], y.h[0],y.h[1]);                           \
     }                                                                                        \
     void name##_(Half *r, Half *g, Half *b, Half *a, Float *x, Float *y, int end, __VA_ARGS__)

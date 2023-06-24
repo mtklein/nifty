@@ -5,7 +5,7 @@ static void done_(struct Effect const *ip, int end, Half r , Half g , Half b , H
                                                   , Half xl, Half xh, Half yl, Half yh) {
     unused(ip,end, r,g,b,a, xl,xh, yl,yh);
 }
-struct Effect const done = {done_, (void*)0};
+struct Effect const done = {done_, .vptr=(void*)0};
 
 void run(struct Effect const program[], int n) {
     int const K = (int)(sizeof(Half) / sizeof(half));
