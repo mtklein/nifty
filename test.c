@@ -6,11 +6,19 @@
 #include "custom.h"
 #include "matrix.h"
 
-struct Registers {
-    Half r,g,b,a;
-    Float    x,y;
+#define K (int)(sizeof(Half) / sizeof(half))
+
+union Registers {
+    struct {
+        Half  r,g,b,a;
+        Float x,y;
+    };
+    struct {
+        half  R[K],G[K],B[K],A[K];
+        float X[K],Y[K];
+    };
 };
-static define_effect_fn(dump, struct Registers *reg) {
+static define_effect_fn(dump, union Registers *reg) {
     unused(end);
     reg->r = *r;
     reg->g = *g;
@@ -20,10 +28,9 @@ static define_effect_fn(dump, struct Registers *reg) {
     reg->y = *y;
 }
 
-
 static void test_premul(void) {
     struct Color const c = {0.75f, 0.5f, 0.25f, 0.5f};
-    struct Registers reg;
+    union Registers reg;
 
     struct Effect program[] = {
         uniform_color(&c),
@@ -34,10 +41,10 @@ static void test_premul(void) {
     run(program,1);
 
     for (int i = 0; i < (int)(sizeof(Half)/sizeof(half)); i++) {
-        expect((float) i[(half const*)&reg.r] == 0.375f);
-        expect((float) i[(half const*)&reg.g] == 0.250f);
-        expect((float) i[(half const*)&reg.b] == 0.125f);
-        expect((float) i[(half const*)&reg.a] == 0.500f);
+        expect((float)reg.R[i] == 0.375f);
+        expect((float)reg.G[i] == 0.250f);
+        expect((float)reg.B[i] == 0.125f);
+        expect((float)reg.A[i] == 0.500f);
     }
 }
 
