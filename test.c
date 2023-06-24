@@ -18,6 +18,15 @@ union Registers {
         float X[K],Y[K];
     };
 };
+static define_effect_fn(load, union Registers const *reg) {
+    unused(end);
+    *r = reg->r;
+    *g = reg->g;
+    *b = reg->b;
+    *a = reg->a;
+    *x = reg->x;
+    *y = reg->y;
+}
 static define_effect_fn(dump, union Registers *reg) {
     unused(end);
     reg->r = *r;
@@ -60,19 +69,42 @@ static void test_scanline(void) {
 
     run(program,K);
     for (int i = 0; i < K; i++) {
-        expect((float)reg.X[i] - (float)i == 4.5f);
-        expect((float)reg.Y[i]            == 7.5f);
+        expect(reg.X[i] - (float)i == 4.5f);
+        expect(reg.Y[i]            == 7.5f);
     }
 
     run(program,2*K);
     for (int i = 0; i < K; i++) {
-        expect((float)reg.X[i] - (float)(i+K) == 4.5f);
-        expect((float)reg.Y[i]                == 7.5f);
+        expect(reg.X[i] - (float)(i+K) == 4.5f);
+        expect(reg.Y[i]                == 7.5f);
     }
+}
+
+static void test_affine(void) {
+    struct Affine const m = {
+        2,1,3,
+        0,5,4,
+    };
+    union Registers reg = {
+        .X = {1},
+        .Y = {3},
+    };
+
+    struct Effect program[] = {
+        {load, .cptr=&reg},
+        affine(&m),
+        {dump, .vptr=&reg},
+        done,
+    };
+
+    run(program,1);
+    expect(reg.X[0] ==  8.0f);
+    expect(reg.Y[0] == 19.0f);
 }
 
 int main(void) {
     test_premul();
     test_scanline();
+    test_affine();
     return 0;
 }
