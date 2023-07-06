@@ -19,22 +19,22 @@ union Registers {
     };
 };
 static define_effect_fn(load, union Registers const *reg) {
+    unused(end);
     *r = reg->r;
     *g = reg->g;
     *b = reg->b;
     *a = reg->a;
     *x = reg->x;
     *y = reg->y;
-    unused(end);
 }
 static define_effect_fn(dump, union Registers *reg) {
+    unused(end);
     reg->r = *r;
     reg->g = *g;
     reg->b = *b;
     reg->a = *a;
     reg->x = *x;
     reg->y = *y;
-    unused(end);
 }
 
 static void test_uniform_color(void) {

@@ -1,4 +1,4 @@
 #pragma once
 
-static void unused_(int x, ...) { (void)x; }
-#define unused(...) unused_(0, __VA_ARGS__)
+static int unused_(int x, ...) { return x; }
+#define unused(...) int __attribute__((unused)) unused = unused_(0, __VA_ARGS__)
