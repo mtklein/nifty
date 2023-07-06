@@ -11,8 +11,6 @@ static int begin(int end) {
 }
 
 static define_effect_fn(scanline_, struct Scanline const *arg) {
-    unused(r,g,b,a);
-
     union {
         float val[K];
         Float vec;
@@ -20,9 +18,9 @@ static define_effect_fn(scanline_, struct Scanline const *arg) {
     for (int i = 0; i < K; i++) {
         iota.val[i] = i;
     }
-
     *x = arg->x0 + begin(end) + 0.5f + iota.vec;
     *y = arg->y               + 0.5f - (Float){0};
+    unused(r,g,b,a);
 }
 struct Effect scanline(struct Scanline const *arg) {
     return (struct Effect){scanline_, .cptr=arg};
@@ -30,11 +28,11 @@ struct Effect scanline(struct Scanline const *arg) {
 
 
 static define_effect_fn(affine_, struct Affine const *m) {
-    unused(r,g,b,a,end);
     Float X = *x * m->sx + (*y * m->kx + m->tx),
           Y = *x * m->ky + (*y * m->sy + m->ty);
     *x = X;
     *y = Y;
+    unused(r,g,b,a,end);
 }
 struct Effect affine(struct Affine const *m) {
     return (struct Effect){affine_, .cptr=m};
