@@ -14,13 +14,15 @@
 
 typedef float __attribute__((vector_size(sizeof(Half)/sizeof(half) * sizeof(float)))) Float;
 
-extern struct Effect {
+struct Effect {
     void (*fn)(struct Effect const*,int, Half,Half,Half,Half, Half,Half,Half,Half);
     union {
         void       *vptr;
         void const *cptr;
     };
-} const done;
+};
+
+extern struct Effect const done;
 
 void run(struct Effect const program[], int n);
 
