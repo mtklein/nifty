@@ -24,11 +24,11 @@ struct Effect {
 
 extern struct Effect const done;
 
-struct LoopArg {
+struct Loop {
     int const jmp;
     int         n;
 };
-struct Effect loop(struct LoopArg*);
+struct Effect loop(struct Loop*);
 
 void run(struct Effect const program[], int n);
 

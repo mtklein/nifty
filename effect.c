@@ -10,11 +10,11 @@ struct Effect const done = {done_, .vptr=(void*)0};
 
 static void loop_(struct Effect const *ip, int end, Half r , Half g , Half b , Half a
                                                   , Half xl, Half xh, Half yl, Half yh) {
-    struct LoopArg *arg = ip->vptr;
+    struct Loop *arg = ip->vptr;
     int const jmp = --arg->n ? arg->jmp : 1;
     ip[jmp].fn(ip+jmp,end, r,g,b,a, xl,xh, yl,yh);
 }
-struct Effect loop(struct LoopArg *arg) {
+struct Effect loop(struct Loop *arg) {
     return (struct Effect){loop_, .vptr=arg};
 }
 

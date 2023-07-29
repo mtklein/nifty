@@ -132,7 +132,7 @@ static void test_loop(void) {
     union Registers reg = {
         .X = {2},
     };
-    struct LoopArg l = {.jmp=-1, .n=4};
+    struct Loop l = {.jmp=-1, .n=4};
 
     struct Effect program[] = {
         {load, .cptr=&reg},
