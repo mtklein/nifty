@@ -123,10 +123,35 @@ static void test_affine(void) {
     expect(reg.Y[0] == 19.0f);
 }
 
+static define_effect_fn(square_x, void* arg) {
+    unused(r,g,b,a,y,end,arg);
+    *x *= *x;
+}
+
+static void test_loop(void) {
+    union Registers reg = {
+        .X = {2},
+    };
+    struct LoopArg l = {.n=4};
+
+    struct Effect program[] = {
+        {load, .cptr=&reg},
+        {square_x, .vptr=(void*)0},
+        loop(&l),
+        {dump, .vptr=&reg},
+        done,
+    };
+    l.dst = program+1;
+
+    run(program,1);
+    expect(reg.X[0] == 65536.0f);
+}
+
 int main(void) {
     test_uniform_color();
     test_premul();
     test_scanline();
     test_affine();
+    test_loop();
     return 0;
 }

@@ -24,6 +24,13 @@ struct Effect {
 
 extern struct Effect const done;
 
+struct LoopArg {
+    struct Effect *dst;
+    int              i;
+    int const        n;
+};
+struct Effect loop(struct LoopArg*);
+
 void run(struct Effect const program[], int n);
 
 #define define_effect_fn(name, ...)                                                          \
