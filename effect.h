@@ -25,9 +25,8 @@ struct Effect {
 extern struct Effect const done;
 
 struct LoopArg {
-    struct Effect *dst;
-    int              i;
-    int const        n;
+    int const jmp;
+    int         n;
 };
 struct Effect loop(struct LoopArg*);
 

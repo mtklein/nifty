@@ -132,7 +132,7 @@ static void test_loop(void) {
     union Registers reg = {
         .X = {2},
     };
-    struct LoopArg l = {.n=4};
+    struct LoopArg l = {.jmp=-1, .n=4};
 
     struct Effect program[] = {
         {load, .cptr=&reg},
@@ -141,10 +141,10 @@ static void test_loop(void) {
         {dump, .vptr=&reg},
         done,
     };
-    l.dst = program+1;
 
     run(program,1);
     expect(reg.X[0] == 65536.0f);
+    expect(l.n == 0);
 }
 
 int main(void) {
