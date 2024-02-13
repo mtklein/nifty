@@ -18,11 +18,11 @@ static define_effect_fn(scanline_, struct Scanline const *arg) {
         Float vec;
     } iota;
     for (int i = 0; i < K; i++) {
-        iota.val[i] = i;
+        iota.val[i] = (float)i;
     }
 
-    *x = arg->x0 + begin(end) + 0.5f + iota.vec;
-    *y = arg->y               + 0.5f - (Float){0};
+    *x = (float)(arg->x0 + begin(end)) + 0.5f + iota.vec;
+    *y = (float)(arg->y              ) + 0.5f - (Float){0};
 }
 struct Effect scanline(struct Scanline const *arg) {
     return (struct Effect){scanline_, .cptr=arg};
